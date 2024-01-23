@@ -30,22 +30,21 @@ def perf_ope():
             case "*":
                 result.set(num1 * num2)
 
-            case "/":
-                result.set(num1 / num2)
-
             case "**":
                 result.set(num1 ** num2)
+
+            case "/":
+                result.set(num1 / num2)
 
             case "//":
                 result.set(num1 // num2)
 
             case "%":
                 result.set(num1 % num2)
-    except (ValueError ,ZeroDivisionError):
-        if ValueError is True:
-            result.set("Erreur de valeur")
-        elif ZeroDivisionError.:
-            result.set("Division par zero impossible")
+    except ValueError:
+        result.set("Erreur de saisie")
+    except ZeroDivisionError:
+        result.set("Division par zero impossible")
 
 
 
