@@ -56,6 +56,15 @@ def perf_ope():
     except ZeroDivisionError:
         result1.set("Division par zero impossible")
 
+def view_log():
+    """Permit to see the operation log
+    """
+    fenetre = tk.Tk()
+    fenetre.title("Operation Log")
+    text = tk.Text(fenetre)
+    text.insert(tk.END,str(pd.read_csv('operation.csv')))
+    text.grid(row=0, column=0, padx=10, pady=10)
+    fenetre.mainloop
 
 window = tk.Tk()
 window.title("Calculatrice")
@@ -78,9 +87,13 @@ operation_dropdown = ttk.Combobox(window, textvariable=operation_var, values=ope
 operation_dropdown.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 operation_dropdown.set("+")
 
-# operation button
+# Operation button
 calculate_button = tk.Button(window, text="Calculate", command=perf_ope)
 calculate_button.grid(row=2, column=0, columnspan=2, pady=10)
+
+# View operation logs button
+log_button = tk.Button(window, text="Operation logs", command=view_log)
+log_button.grid(row=2, column=0, columnspan=2, pady=10)
 
 result_label1 = tk.Label(window, textvariable=result1)
 result_label1.grid(row=3, column=0, columnspan=2, pady=10)
