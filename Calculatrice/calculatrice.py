@@ -10,22 +10,42 @@
 
 # Une feuille comportant 5 tests fonctionnels d’une application concurrente.
 import tkinter as tk
+from tkinter import ttk
 
-def addition():
-    """ Sum of the two entries
+def perf_ope():
+    """ Performs the calculated selection in the checkbox
     """
+    try:
+        num1 = float(entry1.get())
+        num2 = float(entry2.get())
+        selected_operation = operation_var.get()
 
-def subtraction():
-    """ Subtraction of the two entries
-    """
+        match selected_operation:
+            case "+":
+                result.set(num1 + num2)
 
-def multiplication():
-    """ Product of the two entries
-    """
+            case "-":
+                result.set(num1 - num2)
 
-def division():
-    """ Division of the two entries
-    """
+            case "*":
+                result.set(num1 * num2)
+
+            case "/":
+                result.set(num1 / num2)
+
+            case "**":
+                result.set(num1 ** num2)
+
+            case "//":
+                result.set(num1 // num2)
+
+            case "%":
+                result.set(num1 % num2)
+    except (ValueError ,ZeroDivisionError):
+        if ValueError is True:
+            result.set("Erreur de valeur")
+        elif ZeroDivisionError.:
+            result.set("Division par zero impossible")
 
 
 
@@ -42,20 +62,16 @@ entry1.grid(row=0, column=0, padx=10, pady=10)
 entry2 = tk.Entry(window, width=15)
 entry2.grid(row=0, column=1, padx=10, pady=10)
 
-# Button call addition function
-add_button = tk.Button(window, text="+", command=addition)
-add_button.grid(row=1, column=0, padx=5, pady=5)
+# List of operations
+operations = ["+", "-", "*", "/", "**", "//", "%"]
+operation_var = tk.StringVar()
+operation_dropdown = ttk.Combobox(window, textvariable=operation_var, values=operations)
+operation_dropdown.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+operation_dropdown.set("+")
 
-# Button call subtraction function
-subtract_button = tk.Button(window, text="-", command=subtraction)
-subtract_button.grid(row=1, column=1, padx=5, pady=5)
-
-# Button call multiplication function
-multiply_button = tk.Button(window, text="*", command=multiplication)
-multiply_button.grid(row=2, column=0, padx=5, pady=5)
-
-divide_button = tk.Button(window, text="/", command=division)
-divide_button.grid(row=2, column=1, padx=5, pady=5)
+# Bouton pour effectuer l'opération
+calculate_button = tk.Button(window, text="Calculer", command=perf_ope)
+calculate_button.grid(row=2, column=0, columnspan=2, pady=10)
 
 result_label = tk.Label(window, textvariable=result)
 result_label.grid(row=3, column=0, columnspan=2, pady=10)
