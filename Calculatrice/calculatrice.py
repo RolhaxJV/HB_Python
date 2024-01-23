@@ -1,11 +1,12 @@
-# region
-# En utilisant Tkinter, votre mission sera de réaliser une calculatrice.
-# La contrainte à ce projet, est que la calculatrice ne possède qu’au maximum trois boutons.
-# Livrables attendus :
-# Un lien Github vers l’application
-# Une feuille comportant 5 tests fonctionnels de sa propre application
-# Une feuille comportant 5 tests fonctionnels d’une application concurrente.
-#endregion
+""" Calculatrice
+En utilisant Tkinter, votre mission sera de réaliser une calculatrice.
+La contrainte à ce projet, est que la calculatrice ne possède qu’au maximum trois boutons.
+Livrables attendus :
+    Un lien Github vers l’application
+    Une feuille comportant 5 tests fonctionnels de sa propre application
+    Une feuille comportant 5 tests fonctionnels d’une application concurrente.
+"""
+
 import tkinter as tk
 from tkinter import ttk
 import pandas as pd
@@ -78,7 +79,7 @@ operation_dropdown.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 operation_dropdown.set("+")
 
 # operation button
-calculate_button = tk.Button(window, text="Calculer", command=perf_ope)
+calculate_button = tk.Button(window, text="Calculate", command=perf_ope)
 calculate_button.grid(row=2, column=0, columnspan=2, pady=10)
 
 result_label1 = tk.Label(window, textvariable=result1)
