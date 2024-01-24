@@ -1,29 +1,28 @@
 # HB_Python
 
-Formation au python
+Python Training
 
 ## Contenu
 
-- **Exercices Python:**
-  - `Conditional_Bloc.ipynb`: Exercices sur les blocs de condition python
-  - `Loop.ipynb`: Exercices sur les boucles python
-  - `Variable.ipynb`: Exercices sur les variable python
+- **CSV Data and Notebook:**
+  - `addition.csv`: CSV file containing data for using the Pandas library.
+  - `Notebook_Jupyter.ipynb`:  Jupyter Notebook containing the lessons.
 
-- **Données CSV et Notebook:**
-  - `addition.csv`: Fichier CSV contenant des données afin d'utiliser la librairie pandas.
-  - `Notebook_Jupyter.ipynb`: Jupyter Notebook contenant les cours.
+- **Folder:**
+  - **Calculator:**
+    - `calculator.py`: Python script that recreates a calculator.
+    - `cahier_de_test_Developpeur.xlsx`: Excel file containing a table of tests performed by the developer.
+    - `tests_sheet.xlsx`: Excel file containing a table of tests performed by a third party.
+    - `operation.csv`: CSV file for recording calculation history.
 
-- **Dossier:**
-  - **Calculatrice:**
-    - `calculatrice.py`: Script Python qui recréer une calculatrice.
-    - `cahier_de_test_Developpeur.xlsx`: Fichier Excel contenant un tableau des tests effectuer par le développeur.
-    - `cahier_de_test_par_Pierre.xlsx`: Fichier Excel contenant un tableau des tests effectuer par un tiers.
-
-    - `operation.csv`: Fichier CSV qui permet l'historisation des calculs.
+  - **Exercise:**
+    - `Conditional_Bloc.ipynb`: Exercises on Python conditional blocks.
+    - `Loop.ipynb`: Exercises on Python loops.
+    - `Variable.ipynb`: Exercises on Python variables.
 
 ## Installations
 
-- **Librairie a installer:**
+- **Libraries to install:**
   - **Pandas**
   - **Tkinter**
   - **Datetime**
