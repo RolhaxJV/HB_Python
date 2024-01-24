@@ -54,10 +54,10 @@ def perf_ope():
                                     'Numero 2': [num2],
                                     'Operation': [f"{num1} {selected_operation} {num2}"],
                                     'Resultat': [result1.get()]})))
-    except ValueError:
-        result1.set("Erreur de saisie")
+    except ValueError as e:
+        result1.set(f"Input error: {e}")
     except ZeroDivisionError:
-        result1.set("Division par zero impossible")
+        result1.set("Division by zero impossible")
 
 def view_log():
     """Permit to see the operation log
