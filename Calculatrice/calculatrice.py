@@ -18,7 +18,7 @@ def save(dataframe):
     Returns:
         str: information message
     """
-    dataframe.to_csv('operation.csv', mode='a', index='Numero 1', header=False)
+    dataframe.to_csv('operation.csv', mode='a', index=False, header=False)
     return "Add in csv file made"
 
 def perf_ope():
@@ -50,7 +50,9 @@ def perf_ope():
 
             case "%":
                 result1.set(num1 % num2)
-        result2.set(save(pd.DataFrame({'Numero 1': [num1], 'Numero 2': [num2], 'Resultat': [result1.get()]})))
+        result2.set(save(pd.DataFrame({'Numero 1': [num1],
+                                    'Numero 2': [num2],
+                                    'Resultat': [result1.get()]})))
     except ValueError:
         result1.set("Erreur de saisie")
     except ZeroDivisionError:
@@ -64,7 +66,6 @@ def view_log():
     text = tk.Text(fenetre)
     text.insert(tk.END,str(pd.read_csv('operation.csv')))
     text.grid(row=0, column=0, padx=10, pady=10)
-    fenetre.mainloop
 
 window = tk.Tk()
 window.title("Calculatrice")
@@ -89,11 +90,11 @@ operation_dropdown.set("+")
 
 # Operation button
 calculate_button = tk.Button(window, text="Calculate", command=perf_ope)
-calculate_button.grid(row=2, column=0, columnspan=2, pady=10)
+calculate_button.grid(row=2, column=0, pady=10)
 
 # View operation logs button
 log_button = tk.Button(window, text="Operation logs", command=view_log)
-log_button.grid(row=2, column=0, columnspan=2, pady=10)
+log_button.grid(row=2, column=1, pady=10)
 
 result_label1 = tk.Label(window, textvariable=result1)
 result_label1.grid(row=3, column=0, columnspan=2, pady=10)
