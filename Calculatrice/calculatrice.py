@@ -52,6 +52,7 @@ def perf_ope():
                 result1.set(num1 % num2)
         result2.set(save(pd.DataFrame({'Numero 1': [num1],
                                     'Numero 2': [num2],
+                                    'Operation': [f"{num1} {selected_operation} {num2}"],
                                     'Resultat': [result1.get()]})))
     except ValueError:
         result1.set("Erreur de saisie")
@@ -82,7 +83,7 @@ entry2 = tk.Entry(window, width=15)
 entry2.grid(row=0, column=1, padx=10, pady=10)
 
 # List of operations
-operations = ["+", "-", "*", "/", "**", "//", "%"]
+operations = ["+", "*", "**", "-", "/", "//", "%"]
 operation_var = tk.StringVar()
 operation_dropdown = ttk.Combobox(window, textvariable=operation_var, values=operations)
 operation_dropdown.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
