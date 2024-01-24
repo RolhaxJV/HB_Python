@@ -25,8 +25,8 @@ def perf_ope():
     """ Performs the calculated selection in the checkbox
     """
     try:
-        num1 = float(entry1.get())
-        num2 = float(entry2.get())
+        num1 = float(entry1.get().replace(',','.'))
+        num2 = float(entry2.get().replace(',','.'))
         selected_operation = operation_var.get()
 
         match selected_operation:
@@ -80,13 +80,13 @@ entry1.grid(row=0, column=0, padx=10, pady=10)
 
 # Entry Two
 entry2 = tk.Entry(window, width=15)
-entry2.grid(row=0, column=1, padx=10, pady=10)
+entry2.grid(row=0, column=2, padx=10, pady=10)
 
 # List of operations
 operations = ["+", "*", "**", "-", "/", "//", "%"]
 operation_var = tk.StringVar()
-operation_dropdown = ttk.Combobox(window, textvariable=operation_var, values=operations)
-operation_dropdown.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
+operation_dropdown = ttk.Combobox(window, textvariable=operation_var, values=operations, width=5)
+operation_dropdown.grid(row=0, column=1, padx=10, pady=10)
 operation_dropdown.set("+")
 
 # Operation button
@@ -95,12 +95,12 @@ calculate_button.grid(row=2, column=0, pady=10)
 
 # View operation logs button
 log_button = tk.Button(window, text="Operation logs", command=view_log)
-log_button.grid(row=2, column=1, pady=10)
+log_button.grid(row=2, column=2, pady=10)
 
 result_label1 = tk.Label(window, textvariable=result1)
-result_label1.grid(row=3, column=0, columnspan=2, pady=10)
+result_label1.grid(row=3, column=1, pady=10)
 
 result_label2 = tk.Label(window, textvariable=result2)
-result_label2.grid(row=4, column=0, columnspan=2, pady=10)
+result_label2.grid(row=4, column=1,pady=10)
 
 window.mainloop()
