@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 
 con = sqlite3.connect('fromages_bdd.sqlite')
-data_from_db = pd.read_sql_query("SELECT fromage_names from fromages_table WHERE pictures_paths is null", con)
+data_from_db = pd.read_sql_query("SELECT fromage_names from fromages_table WHERE grades is null", con)
 con.close()
 
 print(data_from_db)

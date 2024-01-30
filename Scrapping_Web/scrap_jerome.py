@@ -104,9 +104,7 @@ class FromageETL:
                     # Description
                     page_desck = soup.find('div', class_='woocommerce-product-details__short-description')
                     if page_desck is not None and page_desck.text != '':
-                        page_desck.find_all('p')
-                        for p in page_desck:
-                            desck += p.text.strip()
+                        desck += page_desck.text.strip()
 
                     # Prix
                     page_price = soup.find('p', class_='price')
@@ -131,14 +129,14 @@ class FromageETL:
                     fromage_names.append(fromage_name)
                     fromage_familles.append(fromage_famille)
                     pates.append(pate)
-                    
+
                     if picture_path == '':
                         picture_path = None
-                        
+
                     if price == '':
                         price = None
                         
-                    if desck == '': 
+                    if desck == '':
                         desck = None
                         
                     if ave_grade == '':
@@ -357,9 +355,8 @@ class FromageETL:
         os.makedirs(save_directory, exist_ok=True)
         try:
             filename = os.path.basename(urlparse(url).path)
-            
             filepath = os.path.join(save_directory, filename)
-            
+
             response = requests.get(url)
             response.raise_for_status()
             # Enregistre l'image localement
