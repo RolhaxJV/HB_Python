@@ -62,7 +62,7 @@ class FromageETL:
         fromage_names = []
         fromage_familles = []
         pates = []
-        
+
         # evolution de la base
         pictures_paths = []
         prices = []
@@ -82,11 +82,11 @@ class FromageETL:
                 pate = columns[2].text.strip()
 
                 # region Evolution
-                picture_path = ''
-                price = ''
-                desck = ''
-                ave_grade = ''
-                review = ''
+                picture_path = None
+                price = None
+                desck = None
+                ave_grade = None
+                review = None
 
                 anchor = columns[0].find('a')
                 if anchor:
@@ -104,7 +104,7 @@ class FromageETL:
                     # Description
                     page_desck = soup.find('div', class_='woocommerce-product-details__short-description')
                     if page_desck is not None and page_desck.text != '':
-                        desck += page_desck.text.strip()
+                        desck = page_desck.text.strip()
 
                     # Prix
                     page_price = soup.find('p', class_='price')
@@ -130,33 +130,16 @@ class FromageETL:
                     fromage_familles.append(fromage_famille)
                     pates.append(pate)
 
-                    if picture_path == '':
-                        picture_path = None
-
-                    if price == '':
-                        price = None
-                        
-                    if desck == '':
-                        desck = None
-                        
-                    if ave_grade == '':
-                        ave_grade = None
-                        
-                    if review == '':
-                        review = None
-                        
                     pictures_paths.append(picture_path)
                     prices.append(price)
                     descks.append(desck)
                     average_grades.append(ave_grade)
                     nb_reviews.append(review)
 
-
         self.data = pd.DataFrame({
             'fromage_names': fromage_names,
             'fromage_familles': fromage_familles,
             'pates': pates,
-
             'pictures_paths' : pictures_paths,
             'prices' : prices,
             'descriptions' : descks,
@@ -178,168 +161,6 @@ class FromageETL:
         self.data.to_sql(table_name, con, if_exists="replace", index=False)
         con.close()
         return self.data
-
-    def read_from_database(self, database_name, table_name):
-        """
-        Lit les données à partir d'une table SQLite spécifiée.
-
-        Parameters:
-        - database_name (str): Le nom de la base de données SQLite.
-        - table_name (str): Le nom de la table à lire.
-
-        Returns:
-        - pd.DataFrame: Un DataFrame contenant les données de la table.
-        """
-        con = sqlite3.connect(database_name)
-        data_from_db = pd.read_sql_query(f"SELECT * from {table_name}", con)
-        con.close()
-        return data_from_db
-
-    def get_fromage_names(self, database_name, table_name):
-        """
-        Récupère les noms de fromages depuis une table SQLite spécifiée.
-
-        Parameters:
-        - database_name (str): Le nom de la base de données SQLite.
-        - table_name (str): Le nom de la table à interroger.
-
-        Returns:
-        - pd.DataFrame: Un DataFrame contenant la colonne 'fromage_names'.
-        """
-        con = sqlite3.connect(database_name)
-        data_from_db = pd.read_sql_query(f"SELECT fromage_names from {table_name}", con)
-        con.close()
-        return data_from_db
-
-    def get_fromage_familles(self, database_name, table_name):
-        """
-        Récupère les familles de fromages depuis une table SQLite spécifiée.
-
-        Parameters:
-        - database_name (str): Le nom de la base de données SQLite.
-        - table_name (str): Le nom de la table à interroger.
-
-        Returns:
-        - pd.DataFrame: Un DataFrame contenant la colonne 'fromage_familles'.
-        """
-        con = sqlite3.connect(database_name)
-        data_from_db = pd.read_sql_query(f"SELECT fromage_familles from {table_name}", con)
-        con.close()
-        return data_from_db
-
-    def get_pates(self, database_name, table_name):
-        """
-        Récupère les types de pâtes des fromages depuis une table SQLite spécifiée.
-
-        Parameters:
-        - database_name (str): Le nom de la base de données SQLite.
-        - table_name (str): Le nom de la table à interroger.
-
-        Returns:
-        - pd.DataFrame: Un DataFrame contenant la colonne 'pates'.
-        """
-        con = sqlite3.connect(database_name)
-        data_from_db = pd.read_sql_query(f"SELECT pates from {table_name}", con)
-        con.close()
-        return data_from_db
-
-    def connect_to_database(self, database_name):
-        """
-        Établit une connexion à une base de données SQLite.
-
-        Parameters:
-        - database_name (str): Le nom de la base de données SQLite.
-
-        Returns:
-        - sqlite3.Connection: Objet de connexion à la base de données.
-        """
-        con = sqlite3.connect(database_name)
-        return con
-
-    def add_row(self, fromage_name, fromage_famille, pate):
-        """
-        Ajoute une nouvelle ligne à l'ensemble de données avec les informations spécifiées.
-
-        Parameters:
-        - fromage_name (str): Nom du fromage à ajouter.
-        - fromage_famille (str): Famille du fromage à ajouter.
-        - pate (str): Type de pâte du fromage à ajouter.
-        """
-        new_row = pd.DataFrame({'fromage_names': [fromage_name],
-            'fromage_familles': [fromage_famille], 'pates': [pate]})
-        self.data = pd.concat([self.data, new_row], ignore_index=True)
-
-    def sort_ascending(self):
-        """
-        Trie l'ensemble de données par ordre croissant des noms de fromages.
-        """
-        self.data = self.data.sort_values(by=['fromage_names'])
-
-    def sort_descending(self):
-        """
-        Trie l'ensemble de données par ordre décroissant des noms de fromages.
-        """
-        self.data = self.data.sort_values(by=['fromage_names'], ascending=False)
-
-    def total_count(self):
-        """
-        Retourne le nombre total de lignes dans l'ensemble de données.
-
-        Returns:
-        - int: Nombre total de lignes.
-        """
-        return len(self.data)
-
-    def count_by_letter(self):
-        """
-        Compte le nombre de fromages par lettre initiale dans les noms.
-
-        Returns:
-        - pd.Series: Série contenant le décompte des fromages par lettre initiale.
-        """
-        return self.data['fromage_names'].str[0].value_counts()
-
-    def update_fromage_name(self, old_name, new_name):
-        """
-        Met à jour le nom d'un fromage dans l'ensemble de données.
-
-        Parameters:
-        - old_name (str): Ancien nom du fromage à mettre à jour.
-        - new_name (str): Nouveau nom à attribuer au fromage.
-        """
-        self.data.loc[self.data.fromage_names == old_name, 'fromage_names'] = new_name
-
-    def delete_row(self, fromage_name):
-        """
-        Supprime une ligne de l'ensemble de données basée sur le nom du fromage.
-
-        Parameters:
-        - fromage_name (str): Nom du fromage à supprimer.
-        """
-        self.data = self.data[self.data.fromage_names != fromage_name]
-
-    def group_and_count_by_first_letter(self, database_name, table_name):
-        """
-        Regroupe les fromages par la première lettre de la famille,
-        et compte le nombre de fromages par groupe.
-
-        Parameters:
-        - database_name (str): Le nom de la base de données SQLite.
-        - table_name (str): Le nom de la table à interroger.
-
-        Returns:
-        - pd.DataFrame: Un DataFrame contenant les colonnes 'fromage_familles' et 'fromage_nb'.
-        """
-        # Utilisez la fonction get_fromage_familles pour récupérer les familles de fromages
-        data_from_db = self.get_fromage_familles(database_name, table_name)
-
-        # Créez une nouvelle colonne 'lettre_alpha'
-        data_from_db['lettre_alpha'] = data_from_db['fromage_familles'].str[0]
-
-        # Utilisez groupby pour regrouper par 'fromage_familles' et compter le nombre de fromages dans chaque groupe
-        grouped_data = data_from_db.groupby('fromage_familles').size().reset_index(name='fromage_nb')
-
-        return grouped_data
 
     def download_image(self,url, save_directory='pictures'):
         """ Download image by url
@@ -378,8 +199,3 @@ fromage_etl.extract()
 fromage_etl.transform()
 fromage_etl.load('fromages_bdd.sqlite', 'fromages_table')
 print((timeit.default_timer() - starttime)/60)
-
-# data_from_db_external = fromage_etl.read_from_database('fromages_bdd.sqlite', 'fromages_table')
-
-# # Afficher le DataFrame
-# print(data_from_db_external)
