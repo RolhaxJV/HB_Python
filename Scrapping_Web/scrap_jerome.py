@@ -43,7 +43,7 @@ class FromageETL:
         """
         data = urlopen(self.url)
         if(frame == "detail"):
-            self.detail = data.read() 
+            self.detail = data.read()
         else:
             self.data = data.read()
 
@@ -109,15 +109,15 @@ class FromageETL:
                     # Prix
                     page_price = soup.find('p', class_='price')
                     if page_price is not None and page_price.text != '':
-                        page_price.find('bdi')
-                        price = float(re.sub(r'[^0-9,]', '', page_price.text.strip()).replace(',','.'))
+                        page_price = page_price.find('bdi')
+                        price = float(re.sub(r'[^0-9,.]', '', page_price.text.strip()).replace(',','.'))
 
                     # Si il y a des avis
                     page_review = soup.find('a', href="#reviews", class_="woocommerce-review-link")
                     if page_review is not None and page_review.text != '':
                         # Nombre d'avis
-                        page_review.find('span')
-                        review = int(re.sub(r'[^0-9,]', '', page_review.text.strip()))
+                        page_review = page_review.find('span')
+                        review = int(re.sub(r'[^0-9]', '', page_review.text.strip()))
 
                         # Moyenne de notation
                         ave_g = soup.find('strong', class_="rating")
@@ -178,7 +178,7 @@ class FromageETL:
             filename = os.path.basename(urlparse(url).path)
             filepath = os.path.join(save_directory, filename)
 
-            response = requests.get(url)
+            response = requests.get(url,timeout=3)
             response.raise_for_status()
             # Enregistre l'image localement
             with open(filepath, 'wb') as f:
