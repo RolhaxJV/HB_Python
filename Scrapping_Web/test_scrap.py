@@ -31,7 +31,7 @@ def etl_instance_fixture():
     Returns:
     - FromageETL: Une instance classe FromageETL avec l'URL spécifiée.
     """
-    return FromageETL("https://www.laboitedufromager.com/liste-des-fromages-par-ordre-alphabetique/")
+    return FromageETL()
 
 @patch('scrap_jerome.urlopen')
 def test_extract(mock_urlopen, etl_instance):
@@ -44,7 +44,7 @@ def test_extract(mock_urlopen, etl_instance):
     # Configurez le comportement simulé de urlopen
     mock_urlopen.return_value.read.return_value = b"<html><body>Mocked HTML</body></html>"
     # Appelez la méthode extract
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     # Assurez-vous que les données ont été correctement extraites
     assert etl_instance.data == b"<html><body>Mocked HTML</body></html>"
 
@@ -71,7 +71,7 @@ def test_load_and_read_from_database(etl_instance, tmp_path):
     Assure que les données chargées dans la base de données correspondent aux données initiales.
     """
     # Appelez extract et transform avant d'accéder à etl_instance.data
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     # Créez un chemin de fichier temporaire pour la base de données
     database_name = tmp_path / "fromages.sqlite"
@@ -95,7 +95,7 @@ def test_get_fromage_names(etl_instance):
     et assure que la méthode renvoie les noms de fromages corrects.
     """
     # Appelez extract et transform avant d'accéder à etl_instance.data
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     # Chargez les données dans la base de données
     etl_instance.load('fromages_bdd.sqlite', 'fromages_table')
@@ -113,7 +113,7 @@ def test_get_fromage_familles(etl_instance):
     et assure que la méthode renvoie les familles de fromages correctes.
     """
     # Appelez extract et transform avant d'accéder à etl_instance.data
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     # Chargez les données dans la base de données
     etl_instance.load('fromages_bdd.sqlite', 'fromages_table')
@@ -131,7 +131,7 @@ def test_get_pates(etl_instance):
     et assure que la méthode renvoie les pâtes de fromages correctes.
     """
     # Appelez extract et transform avant d'accéder à etl_instance.data
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     # Chargez les données dans la base de données
     etl_instance.load('fromages_bdd.sqlite', 'fromages_table')
@@ -156,7 +156,7 @@ def test_add_row(etl_instance):
 
     Assure que la méthode ajoute une ligne aux données, et la longueur des données augmente d'un.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     initial_len = len(etl_instance.data)
     etl_instance.add_row('Test Fromage', 'Test Famille', 'Test Pate')
@@ -168,7 +168,7 @@ def test_sort_ascending(etl_instance):
 
     Assure que la méthode trie les noms de fromages par ordre croissant.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     etl_instance.sort_ascending()
     sorted_names = etl_instance.data['fromage_names'].tolist()
@@ -180,7 +180,7 @@ def test_sort_descending(etl_instance):
 
     Assure que la méthode trie les noms de fromages par ordre décroissant.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     etl_instance.sort_descending()
     sorted_names = etl_instance.data['fromage_names'].tolist()
@@ -192,7 +192,7 @@ def test_total_count(etl_instance):
 
     Assure que la méthode renvoie le nombre total d'enregistrements dans les données.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     count = etl_instance.total_count()
     assert count == len(etl_instance.data)
@@ -203,7 +203,7 @@ def test_count_by_letter(etl_instance):
 
     Assure que la méthode renvoie des comptages de noms de fromages par lettre.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     counts = etl_instance.count_by_letter()
     assert counts is not None
@@ -215,7 +215,7 @@ def test_delete_row(etl_instance):
     Assure que la méthode supprime correctement une ligne des données,
     et la longueur des données diminue d'un.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     etl_instance.add_row('Test Fromage', 'Test Famille', 'Test Pate')
     initial_len = len(etl_instance.data)
@@ -228,7 +228,7 @@ def test_update_fromage_name(etl_instance):
 
     Assure que la méthode met à jour correctement le nom d'un fromage dans les données.
     """
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     etl_instance.add_row('Test Fromage', 'Test Famille', 'Test Pate')
     etl_instance.update_fromage_name('Test Fromage', 'Updated Fromage')
@@ -242,7 +242,7 @@ def test_group_and_count_by_first_letter(etl_instance, tmp_path):
     avec les colonnes 'fromage_familles' et 'fromage_nb'.
     """
     # Extract et transform avant d'accéder à etl_instance.data
-    etl_instance.extract()
+    etl_instance.extract('/liste-des-fromages-par-ordre-alphabetique/')
     etl_instance.transform()
     # Chargement des données dans la base de données
     etl_instance.load(tmp_path / "fromages_bdd.sqlite", "fromages_table")
